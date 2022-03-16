@@ -1,0 +1,48 @@
+What is the namespaces?
+kubernetes supports multiple virtual cluster backed by the same physical cluster.These virtual clusters are called namespaces.
+Namespaces are intended for use in environments with many user spead across multiple teams or project.
+For clusters with a few to tens of users,you should not need to create or think about namespaces at all.
+Namespaces provide a scope for names.Names of resources need to be unique within a namespace,but not across namespaces.
+Using a kubernetes namespace could isolate namespaces for different environments(dev,staging,preprod,prod) in the same cluster.
+
+
+Create Namespace
+kubectl create namespace <namespace>
+
+vim my-namespace.yaml
+
+apiVerson:v1
+kind: Namespace
+metadata:
+    name: newnamespace
+
+kubectl create -f ./my-namespace.yaml
+
+kubectl get pods --namespace=new-namespace
+
+kubectl get rs --namespace=new-namespace
+
+kubectl get deployment --namespace=new-namespace
+
+
+#yaml file 
+#you can specify the namespace in yaml file
+apiVersion: v1
+kind: Pod
+metadata:
+    name: mytutum
+    labels:
+        zone: prod
+        version: v1
+        namespace: test
+spec:
+   containers:
+   - name: mytutumapp
+     image: tutum/hello-world
+     ports:
+     - containerPort: 80
+     
+kubectl apply -f filename.yaml 
+
+kubectl get pods --namespace=test
+
